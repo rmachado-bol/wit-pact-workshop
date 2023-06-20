@@ -11,8 +11,13 @@
     <groupId>com.example</groupId>
     <artifactId>wit-pact-workshop</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>wit-pact-workshop</name>
     <description>wit-pact-workshop</description>
+    <modules>
+        <module>consumer</module>
+        <module>producer</module>
+    </modules>
     <properties>
         <java.version>17</java.version>
     </properties>
