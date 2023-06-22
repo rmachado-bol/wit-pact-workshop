@@ -29,7 +29,9 @@ public class ProducerAPI {
     }
 
     @GetMapping("/catalog")
-    public List<Book> getCatalog(@RequestParam String customerId) {
-        return booksRepository.getLibrary(customerId);
+    public AvailableLibrary getCatalog(@RequestParam String customerId) {
+        return new AvailableLibrary (
+                booksRepository.getLibrary(customerId)
+        );
     }
 }
