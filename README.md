@@ -1,5 +1,5 @@
 # WIT - Contract Testing with PACT
-***
+
 ### Steps Overview
 - [X] step1: Simple consumer & producer
 - [X] step2: Adding Pact to consumer
@@ -7,7 +7,7 @@
 - [ ] step4: Using a pact broker
 
 ## Current Step
-***
+
 ### Step3 - Adding Pact Verify to producer
 
 Now that we have established the consumer's expectations and generated our first pact, 
@@ -41,7 +41,7 @@ that would be an even better approach. You can read more about it in the [pact d
 
 Good testing scope:
 
-![testing scope](pictures/testing_scope_producer.png)
+<img src="pictures/testing_scope_producer.png" width="80%" height="80%" />
 
 ***
 
