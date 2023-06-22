@@ -1,5 +1,4 @@
 # WIT - Contract Testing with PACT
-***
 This workshop is meant to introduce the participants of the Women in Tech (WIT) workshop to the concepts and functionalities of contract testing with [Pact](https://docs.pact.io/).
 
 The content of this project was inspired on the pact-foundation [workshop](https://github.com/pact-foundation/pact-workshop-jvm-spring) and starting guide [documentation](https://docs.pact.io/5-minute-getting-started-guide).
