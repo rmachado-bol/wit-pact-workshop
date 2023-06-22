@@ -1,75 +1,110 @@
 # WIT - Contract Testing with PACT
 ***
 ### Steps Overview
-* step1: Simple consumer & producer
-* step2: Adding Pact to consumer
-* step3: Adding Pact Verify to producer
-* step4: Using a pact broker
+- [X] step1: Simple consumer & producer
+- [X] step2: Adding Pact to consumer
+- [X] step3: Adding Pact Verify to producer
+- [X] step4: Using a pact broker
 
 ## Current Step
 ***
-### Step3 - Adding Pact Verify to producer
+### Step4 - Using a pact broker
 
-Now that we have established the consumer's expectations and generated our first pact, 
-it is time to validate that with our producer.
+So far we have been sharing the contracts manually between the consumer and the producer.
+However, that is not a desired solution for "real life". Thus, we have a [few options](https://docs.pact.io/getting_started/sharing_pacts#alternative-approaches) 
+to make this process automated:
 
-In this step we will add pact to the producer project, so that the new flow will look like this:
+1. Consumer CI build commits pact to Provider codebase.
 
-![Step3](pictures/step3.png)
+   Pretty self-explanatory.
+
+2. Publish pacts as CI build artifacts
+
+   Work out the URL to the pact created by the most recent successful build, and configure the pact:verify task to point to this URL.
+
+3. Use Gitlab URL
+
+   This only works for repositories that don't require authentication to read. Make sure that you always regenerate the pacts before committing if you make any changes to the pact specs, and that the specs are always passing before you commit, because you don't want to verify the pact from a broken build.
+
+4. Publish pacts to Amazon S3
+
+   Pact::Retreaty is a tool which provides an ultra light mechanism for pushing and pulling pact contracts to/from S3.
+
+5. Use a *pact broker*!!!
+
+   That is, by far, the most robust and fun solution :-)
+
+In this workshop we are going for the 5th option!
+
+This is how the flow will look like:
+
+![Step4](pictures/step4.png)
+
+The Pact Broker is an open source tool that requires you to deploy, administer and host it yourself. 
+If you prefer a plug-and-play solution, there is the option to go with PactFlow, a fully managed Pact Broker with 
+additional features to simplify teams getting started and scaling with Pact.
+
+In this exercise we are using a small Dockerized version of the broker, running on Alpine Linux with Puma, you can read more about it in their [documentation] (https://hub.docker.com/r/pactfoundation/pact-broker).
 ***
 
-### Adding PACT (producer): 
+### Adding the Pact Broker
+- Run the broker from the root directory with `$ docker-compose up`.
 
-- This is also a very simple process, we just need one single dependency for it: `pact-provider`.
+- After that you should see two containers running `$ docker container ls` with the images `pactfoundation/pact-broker` 
+and `postgres`.
 
-- Add the following dependency to the producer `pom.xml`:
+- To allow the consumer to publish contracts to the broker we need to add the following plugin to the consumer pom.xml:
 
-```xml
-  <dependency>
-      <groupId>au.com.dius.pact.provider</groupId>
-      <artifactId>junit5</artifactId>
-      <version>4.3.16</version>
-      <scope>test</scope>
-  </dependency>
-```
+            <plugin>
+                <groupId>au.com.dius</groupId>
+                <artifactId>pact-jvm-provider-maven_2.12</artifactId>
+                <version>3.5.11</version>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>publish</goal>
+                        </goals>
+                        <!-- Run broker on local machine with docker using docker-compose file -->
+                        <configuration>
+                            <pactDirectory>${basedir}/target/pacts</pactDirectory>
+                            <pactBrokerUrl>http://localhost:8000/</pactBrokerUrl>
+                            <pactBrokerUsername>{yourUsername}</pactBrokerUsername>
+                            <pactBrokerPassword>{yourPassword}</pactBrokerPassword>
+                            <projectVersion>{yourVersion}</projectVersion>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
-### Writing a PACT test
+- Then, from the consumer directory run a `$ mvn clean install`, you should see the pacts being published to our [broker](http://localhost:8000/) That's pretty cool, right? ;-)
 
-To write good producer pact tests we need to cover as much of our application as we can, 
-that means mocking only the external calls (to other services or to a database). And if it is easy to spin up a local database with data (for example using a container)
-that would be an even better approach. You can read more about it in the [pact documentation](https://docs.pact.io/getting_started/testing-scope#scope-of-a-provider-pact-test).
+- From the root directory run `can-i-deploy.sh DigitalLibrary`. Check the answer.
 
-Good testing scope:
+- In order for our producer to fetch the contracts from the broker, instead of the manual process we have been doing to copy the contracts to the resources folder we
+  have to add the annotation `@PactBroker` to our `BookServiceProducerPactTest.java` with the correct configurations of our broker.
 
-![testing scope](pictures/testing_scope_producer.png)
-
-***
-
-### Verifying producer
-
-- Take a look at the pre-written pact test: `BookServiceProducerPactTest.java`.
-
-- With the annotation `@PactFolder("pacts")` you can define a different location for the producer pacts.
-
-- Copy the contract generated by your consumer under `target/pacts` to a new folder on your producer `src/test/resources/pacts`
-
-- Run your test and try to understand why they are failing. 
-
-- We need to declare the necessary states, like for example:
+- Replace the `@PactFolder("pacts")` tag with:
 ```java
-    @State("bookshelf for customerId 1 exists")
-    void toBookshelfForCustomerId1ExistsState() {}
-
-    @State("catalog exists")
-    void toCatalogExistsState() {}
-
-    @State("customerId 5 has no books")
-    void toCustomerId1HasNoBooksState() {}
+@PactBroker(
+        host = "localhost",
+        port = "8000",
+        authentication = @PactBrokerAuth(username = "test", password = "test")
+)
 ```
-- Now you should be able to see exactly what is the error in the contract. Can you understand why?
 
-- Take sometime trying to fix it.
+- Run the producer pact tests `BookServiceProducerPactTest.java`. Not seeing the verification results being published to your broker? Then take a closer look at your test, and uncomment the publish line ;-)
 
-- If you can't, no worries, the fix will be available in the next step.
+> **_⚠️ WARNING ⚠️_**  
+For real projects you should never publish the verification results from your local machine, you should only do so from your CI/CD builds on the appropriate stages.
 
-- Move on to step4
+***
+### Can i deploy?
+
+You can run the script `can-i-deploy.sh` from your root directory with one argument being the service name you want to 
+check to see if it is safe to deploy your application. Example: `$ ./can-i-deploy BookService`
+
+***
+### What's next?
+You don't have to implement the full shabang to see the benefits of pact, see the section
+*How to reach the [Pact Nirvana](https://docs.pact.io/pact_nirvana)* to have an idea of what that could look like for you and your team.

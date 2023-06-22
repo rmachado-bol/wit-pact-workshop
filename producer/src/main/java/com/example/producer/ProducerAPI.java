@@ -21,11 +21,7 @@ public class ProducerAPI {
     @GetMapping("/bookshelf")
     public Bookshelf getBookshelf(@RequestParam String customerId) {
         Optional<Bookshelf> bookshelf = booksRepository.getBookshelf(customerId);
-        if (bookshelf.isPresent()) {
-            return bookshelf.get();
-        } else {
-            throw new ResourceNotFoundException();
-        }
+        return bookshelf.orElseGet(() -> new Bookshelf(List.of()));
     }
 
     @GetMapping("/catalog")

@@ -1,0 +1,219 @@
+{
+  "consumer": {
+    "name": "DigitalLibrary"
+  },
+  "interactions": [
+    {
+      "description": "get bookshelf for customerId 1",
+      "providerStates": [
+        {
+          "name": "bookshelf for customerId 1 exists"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/bookshelf",
+        "query": {
+          "customerId": [
+            "1"
+          ]
+        }
+      },
+      "response": {
+        "body": {
+          "books": [
+            {
+              "author": "string",
+              "isbn": "string",
+              "title": "string"
+            }
+          ]
+        },
+        "generators": {
+          "body": {
+            "$.books[*].author": {
+              "size": 20,
+              "type": "RandomString"
+            },
+            "$.books[*].isbn": {
+              "size": 20,
+              "type": "RandomString"
+            },
+            "$.books[*].title": {
+              "size": 20,
+              "type": "RandomString"
+            }
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json;"
+        },
+        "matchingRules": {
+          "body": {
+            "$.books": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.books[*].author": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.books[*].isbn": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.books[*].title": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "get catalog for customerId 1",
+      "providerStates": [
+        {
+          "name": "catalog exists"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/catalog",
+        "query": {
+          "customerId": [
+            "1"
+          ]
+        }
+      },
+      "response": {
+        "body": {
+          "availableBooks": [
+            {
+              "author": "Zaina Arafat",
+              "isbn": "9781948226509",
+              "title": "You Exist Too Much"
+            },
+            {
+              "author": "Zaina Arafat",
+              "isbn": "9781948226509",
+              "title": "You Exist Too Much"
+            },
+            {
+              "author": "Zaina Arafat",
+              "isbn": "9781948226509",
+              "title": "You Exist Too Much"
+            },
+            {
+              "author": "Zaina Arafat",
+              "isbn": "9781948226509",
+              "title": "You Exist Too Much"
+            },
+            {
+              "author": "Zaina Arafat",
+              "isbn": "9781948226509",
+              "title": "You Exist Too Much"
+            }
+          ]
+        },
+        "headers": {
+          "Content-Type": "application/json;"
+        },
+        "matchingRules": {
+          "body": {
+            "$.availableBooks": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 5
+                }
+              ]
+            },
+            "$.availableBooks[*].author": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.availableBooks[*].isbn": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.availableBooks[*].title": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "get bookshelf for customerId 5",
+      "providerStates": [
+        {
+          "name": "customerId 5 has no books"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/bookshelf",
+        "query": {
+          "customerId": [
+            "5"
+          ]
+        }
+      },
+      "response": {
+        "body": {
+          "books": [
+
+          ]
+        },
+        "headers": {
+          "Content-Type": "application/json;"
+        },
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "pact-jvm": {
+      "version": "4.3.1"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "BookService"
+  }
+}
