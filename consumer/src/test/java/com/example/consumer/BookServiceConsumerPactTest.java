@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(PactConsumerTestExt.class)
 public class BookServiceConsumerPactTest {
@@ -33,13 +35,47 @@ public class BookServiceConsumerPactTest {
                 .headers(Map.of("Content-Type", "application/json;"))
                 .body(new PactDslJsonBody()
                         .eachLike("books")
-                            .stringType("title", "You Exist Too Much")
-                            .stringType("author", "Zaina Arafat")
-                            .stringType("isbn", "9781948226509")
-//                            .minArrayLike("books", 3)
-//                                .stringType("title", "You Exist Too Much")
-//                                .stringType("author", "Zaina Arafat")
-//                                .stringType("isbn", "9781948226509")
+                            .stringType("title")
+                            .stringType("author")
+                            .stringType("isbn")
+                )
+                .toPact();
+    }
+
+    @Pact(consumer = "DigitalLibrary", provider = "BookService")
+    RequestResponsePact getBookshelfForCustomerWithNoBooks(PactDslWithProvider builder) {
+        return builder.given("customerId 5 has no books")
+                .uponReceiving("get bookshelf for customerId 5")
+                .method("GET")
+                .path("/bookshelf")
+                .query("customerId=5")
+                .willRespondWith()
+                .status(200)
+                .headers(Map.of("Content-Type", "application/json;"))
+                .body(new PactDslJsonBody().array("books"))
+                .toPact();
+    }
+
+    @Pact(consumer = "DigitalLibrary", provider = "BookService")
+    RequestResponsePact getCatalogForCustomer(PactDslWithProvider builder) {
+        return builder.given("catalog exists")
+                .uponReceiving("get catalog for customerId 1")
+                .method("GET")
+                .path("/catalog")
+                .query("customerId=1")
+                .willRespondWith()
+                .status(200)
+                .headers(Map.of("Content-Type", "application/json;"))
+                .body(new PactDslJsonBody()
+                            .minArrayLike("availableBooks", 5)
+                                .stringType("title", "You Exist Too Much")
+                                .stringType("author", "Zaina Arafat")
+                                .stringType("isbn", "9781948226509")
+// If we need to check a list of required variants that can have different structures
+//                                .arrayContaining("availableBooks")
+//                                    .object()
+//                                    .closeObject()
+//                                .closeArray()
                 )
                 .toPact();
     }
@@ -47,26 +83,41 @@ public class BookServiceConsumerPactTest {
     @Test
     @PactTestFor(pactMethod = "getBookshelfForCustomer", pactVersion = PactSpecVersion.V3)
     public void getBookshelf_whenBookshelfForCustomerWithId1Exists(MockServer mockServer) {
-        Book book = new Book(
-                "You Exist Too Much",
-                "Zaina Arafat",
-                "9781948226509"
-        );
-
-        Bookshelf expected = new Bookshelf(
-                List.of(
-                        book
-//                        ,book
-//                        ,book
-                ));
-
         RestTemplate restTemplate = new RestTemplateBuilder()
                 .rootUri(mockServer.getUrl())
                 .build();
 
         Bookshelf actual = new ProducerClient(restTemplate).getBookshelf("1");
 
+        assertNotNull(actual.getBooks());
+        assertTrue(actual.getBooks().size() > 0);
+    }
+
+    @Test
+    @PactTestFor(pactMethod = "getBookshelfForCustomerWithNoBooks", pactVersion = PactSpecVersion.V3)
+    public void getBookshelf_whenCustomerWithId5HasNoBooks(MockServer mockServer) {
+        Bookshelf expected = new Bookshelf(List.of());
+
+        RestTemplate restTemplate = new RestTemplateBuilder()
+                .rootUri(mockServer.getUrl())
+                .build();
+
+        Bookshelf actual = new ProducerClient(restTemplate).getBookshelf("5");
+
         assertEquals(expected, actual);
+    }
+
+    @Test
+    @PactTestFor(pactMethod = "getCatalogForCustomer", pactVersion = PactSpecVersion.V3)
+    public void getCatalog_whenCatalogExists(MockServer mockServer) {
+        RestTemplate restTemplate = new RestTemplateBuilder()
+                .rootUri(mockServer.getUrl())
+                .build();
+
+        Catalog actual = new ProducerClient(restTemplate).getCatalog("1");
+
+        assertNotNull(actual.getAvailableBooks());
+        assertTrue(actual.getAvailableBooks().size() > 4);
     }
 
 
