@@ -1,5 +1,4 @@
 # WIT - Contract Testing with PACT
-***
 ### Steps Overview
 - [X] step1: Simple consumer & producer
 - [ ] step2: Adding Pact to consumer
@@ -7,7 +6,6 @@
 - [ ] step4: Using a pact broker
 
 ## Current Step
-***
 ### Step1 - Simple consumer & producer
 
 In this step we will add:
