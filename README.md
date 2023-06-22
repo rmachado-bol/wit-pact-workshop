@@ -1,5 +1,5 @@
 # WIT - Contract Testing with PACT
-***
+
 ### Steps Overview
 - [X] step1: Simple consumer & producer
 - [X] step2: Adding Pact to consumer
@@ -7,7 +7,7 @@
 - [ ] step4: Using a pact broker
 
 ## Current Step
-***
+
 ### Step2 - Adding Pact to consumer
 
 Pact can help us highlight the issue from the previous step and many other problems that can arise when integrating
@@ -43,7 +43,7 @@ code, that is hard to maintain. To learn more read the [pact documentation](http
 
 Good testing scope:
 
-![testing scope](pictures/testing_scope_consumer.png)
+<img src="pictures/testing_scope_consumer.png" width="80%" height="80%" />
 
 Take a look at the pre-written pact test: `SubscriptionConsumerPactTest.java` - it looks similar to a unit test.
 Pact tests need to:
@@ -83,7 +83,7 @@ Pact tests need to:
 
 
 
-> **_⚠️ NOTE:_**  
+> **_⚠️ NOTE_**  
 Even if the producer API client had been graciously provided, it doesn't mean that
 you shouldn't write contract tests. The version of the client you have been given
 may not always be in sync with the deployed API. You should write tests covering your specific expectations, 
