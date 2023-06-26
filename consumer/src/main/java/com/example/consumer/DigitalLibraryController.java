@@ -9,19 +9,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DigitalLibraryController {
 
-    private BookServiceAdapter producerClient;
+    private BookServiceAdapter bookServiceAdapter;
 
-    public DigitalLibraryController(BookServiceAdapter producerClient) {
-        this.producerClient = producerClient;
+    public DigitalLibraryController(BookServiceAdapter bookServiceAdapter) {
+        this.bookServiceAdapter = bookServiceAdapter;
     }
 
     @GetMapping("/bookshelf")
     public Bookshelf getBookshelf(@RequestParam String customerId) {
-        return producerClient.getBookshelf(customerId);
+        return bookServiceAdapter.getBookshelf(customerId);
     }
 
     @GetMapping("/catalog")
     public Catalog getCatalog(@RequestParam String customerId) {
-        return producerClient.getCatalog(customerId);
+        return bookServiceAdapter.getCatalog(customerId);
     }
 }
