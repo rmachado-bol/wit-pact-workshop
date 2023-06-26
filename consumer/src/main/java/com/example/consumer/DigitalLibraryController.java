@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DigitalLibraryController {
 
-    private BookServiceAdapter bookServiceAdapter;
+    private final BookServiceAdapter bookServiceAdapter;
 
     public DigitalLibraryController(BookServiceAdapter bookServiceAdapter) {
         this.bookServiceAdapter = bookServiceAdapter;
