@@ -8,8 +8,9 @@ import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.core.model.PactSpecVersion;
 import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
+import com.example.consumer.model.Bookshelf;
+import com.example.consumer.model.Catalog;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -93,7 +94,7 @@ public class BookServiceConsumerPactTest {
                 .rootUri(mockServer.getUrl())
                 .build();
 
-        Bookshelf actual = new ProducerClient(restTemplate).getBookshelf("1");
+        Bookshelf actual = new BookServiceAdapter(restTemplate).getBookshelf("1");
 
         assertNotNull(actual.getBooks());
         assertTrue(actual.getBooks().size() > 0);
@@ -108,7 +109,7 @@ public class BookServiceConsumerPactTest {
                 .rootUri(mockServer.getUrl())
                 .build();
 
-        Bookshelf actual = new ProducerClient(restTemplate).getBookshelf("8");
+        Bookshelf actual = new BookServiceAdapter(restTemplate).getBookshelf("8");
 
         assertEquals(expected, actual);
     }
@@ -120,7 +121,7 @@ public class BookServiceConsumerPactTest {
                 .rootUri(mockServer.getUrl())
                 .build();
 
-        Catalog actual = new ProducerClient(restTemplate).getCatalog("1");
+        Catalog actual = new BookServiceAdapter(restTemplate).getCatalog("1");
 
         assertNotNull(actual.getAvailableBooks());
         assertTrue(actual.getAvailableBooks().size() > 4);
