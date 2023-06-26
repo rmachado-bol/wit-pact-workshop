@@ -9,10 +9,10 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 @EnableAutoConfiguration
-public class ConsumerApplication {
+public class DigitalLibraryApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ConsumerApplication.class, args);
+        SpringApplication.run(DigitalLibraryApplication.class, args);
     }
 
     @Bean

@@ -1,5 +1,7 @@
 package com.example.consumer;
 
+import com.example.consumer.model.Bookshelf;
+import com.example.consumer.model.Catalog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -9,12 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class ProducerClient {
+public class BookServiceAdapter {
 
     private final RestTemplate restTemplate;
 
     @Autowired
-    public ProducerClient(RestTemplate restTemplate) {
+    public BookServiceAdapter(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
