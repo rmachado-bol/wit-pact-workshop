@@ -44,11 +44,11 @@ public class BookServiceConsumerPactTest {
 
     @Pact(consumer = "DigitalLibrary", provider = "BookService")
     RequestResponsePact getBookshelfForCustomerWithNoBooks(PactDslWithProvider builder) {
-        return builder.given("customerId 1 has no books")
-                .uponReceiving("get bookshelf for customerId 1")
+        return builder.given("customerId 8 has no books")
+                .uponReceiving("get bookshelf for customerId 8")
                 .method("GET")
                 .path("/bookshelf")
-                .query("customerId=1")
+                .query("customerId=8")
                 .willRespondWith()
                 .status(200)
                 .headers(Map.of("Content-Type", "application/json;"))
@@ -95,14 +95,14 @@ public class BookServiceConsumerPactTest {
 
     @Test
     @PactTestFor(pactMethod = "getBookshelfForCustomerWithNoBooks", pactVersion = PactSpecVersion.V3)
-    public void getBookshelf_whenCustomerWithId1HasNoBooks(MockServer mockServer) {
+    public void getBookshelf_whenCustomerWithId8HasNoBooks(MockServer mockServer) {
         Bookshelf expected = new Bookshelf(List.of());
 
         RestTemplate restTemplate = new RestTemplateBuilder()
                 .rootUri(mockServer.getUrl())
                 .build();
 
-        Bookshelf actual = new ProducerClient(restTemplate).getBookshelf("1");
+        Bookshelf actual = new ProducerClient(restTemplate).getBookshelf("8");
 
         assertEquals(expected, actual);
     }
