@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-public class ProducerClientConfig {
+public class BookServiceAdapterConfig {
 
     @Bean
     RestTemplate subscriptionRestTemplate(@Value("${producer.port:8686}") int port) {

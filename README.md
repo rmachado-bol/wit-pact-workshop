@@ -33,7 +33,7 @@ In the `ProducerClient` class you can see how the Digital Library (consumer) is 
 
 - Make sure that it is using the correct Java version, as we need Java 17.
 
-- Start the application by running `com.example.consumer.ConsumerApplication`
+- Start the application by running `com.example.consumer.DigitalLibraryApplication`
 
 #### Using the Application
 - The application swagger interface can be accessed from http://localhost:8080/swagger-ui/index.html#/
@@ -54,7 +54,7 @@ You can see in the `ProducerAPI` class the available endpoints:
 
 - Make sure that it is using the correct Java version, as we need Java 17.
 
-- Start the application by running `com.example.producer.ProducerApplication`
+- Start the application by running `com.example.producer.BookServiceApplication`
 
 #### Using the Application
 - The application swagger interface can be accessed from http://localhost:8686/swagger-ui/index.html#/
