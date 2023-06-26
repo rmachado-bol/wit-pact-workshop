@@ -63,8 +63,8 @@ Good testing scope:
     @State("catalog exists")
     void toCatalogExistsState() {}
 
-    @State("customerId 1 has no books")
-    void toCustomerId1HasNoBooksState() {}
+    @State("customerId 8 has no books")
+    void toCustomerId8HasNoBooksState() {}
 ```
 - Now you should be able to see exactly what is the error in the contract. Can you understand why?
 

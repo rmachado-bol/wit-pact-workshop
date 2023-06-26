@@ -8,6 +8,8 @@ import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.core.model.PactSpecVersion;
 import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -22,7 +24,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(PactConsumerTestExt.class)
 public class BookServiceConsumerPactTest {
-
+    //Only added to make testing easier - not to be used in a real life situation.
+    @BeforeAll
+    static void setUp() {
+        System.setProperty("pact.writer.overwrite", "true");
+    }
     @Pact(consumer = "DigitalLibrary", provider = "BookService")
     RequestResponsePact getBookshelfForCustomer(PactDslWithProvider builder) {
         return builder.given("bookshelf for customerId 1 exists")
@@ -44,11 +50,11 @@ public class BookServiceConsumerPactTest {
 
     @Pact(consumer = "DigitalLibrary", provider = "BookService")
     RequestResponsePact getBookshelfForCustomerWithNoBooks(PactDslWithProvider builder) {
-        return builder.given("customerId 5 has no books")
-                .uponReceiving("get bookshelf for customerId 5")
+        return builder.given("customerId 8 has no books")
+                .uponReceiving("get bookshelf for customerId 8")
                 .method("GET")
                 .path("/bookshelf")
-                .query("customerId=5")
+                .query("customerId=8")
                 .willRespondWith()
                 .status(200)
                 .headers(Map.of("Content-Type", "application/json;"))
@@ -102,7 +108,7 @@ public class BookServiceConsumerPactTest {
                 .rootUri(mockServer.getUrl())
                 .build();
 
-        Bookshelf actual = new ProducerClient(restTemplate).getBookshelf("5");
+        Bookshelf actual = new ProducerClient(restTemplate).getBookshelf("8");
 
         assertEquals(expected, actual);
     }
