@@ -1,14 +1,14 @@
-package com.example.producer;
+package com.example.producer.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Bookshelf {
-    private List<Book> books;
+public class Book {
+    private String title;
+    private String author;
+    private String isbn;
 }

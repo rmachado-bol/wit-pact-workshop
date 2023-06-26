@@ -1,4 +1,4 @@
-package com.example.consumer;
+package com.example.producer.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +9,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Bookshelf {
-    private List<Book> books;
+public class AvailableLibrary {
+    private List<Book> availableBooks;
 }

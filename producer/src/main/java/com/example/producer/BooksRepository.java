@@ -1,5 +1,7 @@
 package com.example.producer;
 
+import com.example.producer.model.Book;
+import com.example.producer.model.Bookshelf;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
