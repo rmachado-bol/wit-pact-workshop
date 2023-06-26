@@ -8,6 +8,7 @@ import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.core.model.PactSpecVersion;
 import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -22,6 +23,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(PactConsumerTestExt.class)
 public class BookServiceConsumerPactTest {
+    //Only added to make testing easier - not to be used in a real life situation.
+    @BeforeAll
+    static void setUp() {
+        System.setProperty("pact.writer.overwrite", "true");
+    }
 
     @Pact(consumer = "DigitalLibrary", provider = "BookService")
     RequestResponsePact getBookshelfForCustomer(PactDslWithProvider builder) {
