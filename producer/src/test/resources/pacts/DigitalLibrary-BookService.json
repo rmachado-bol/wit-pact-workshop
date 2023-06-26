@@ -177,10 +177,10 @@
       }
     },
     {
-      "description": "get bookshelf for customerId 5",
+      "description": "get bookshelf for customerId 8",
       "providerStates": [
         {
-          "name": "customerId 5 has no books"
+          "name": "customerId 8 has no books"
         }
       ],
       "request": {
@@ -188,7 +188,7 @@
         "path": "/bookshelf",
         "query": {
           "customerId": [
-            "5"
+            "8"
           ]
         }
       },

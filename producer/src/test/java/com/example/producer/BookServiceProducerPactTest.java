@@ -43,6 +43,6 @@ public class BookServiceProducerPactTest {
     @State("catalog exists")
     void toCatalogExistsState() {}
 
-    @State("customerId 5 has no books")
-    void toCustomerId1HasNoBooksState() {}
+    @State("customerId 8 has no books")
+    void toCustomerId8HasNoBooksState() {}
 }
