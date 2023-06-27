@@ -37,12 +37,4 @@ public class BookServiceProducerPactTest {
         context.verifyInteraction();
     }
 
-    @State("bookshelf for customerId 1 exists")
-    void toBookshelfForCustomerId1ExistsState() {}
-
-    @State("catalog exists")
-    void toCatalogExistsState() {}
-
-    @State("customerId 8 has no books")
-    void toCustomerId1HasNoBooksState() {}
 }
